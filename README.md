@@ -9,6 +9,7 @@
 Перший додаток — вивчення state, кнопок та віджетів, ООП в Dart/Flutter.
 
 ![Quizzler Demo](assets/quizzler/demo.gif)
+
 **Що використано:**
 
 * StatefulWidget
