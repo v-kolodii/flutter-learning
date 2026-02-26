@@ -1,9 +1,12 @@
+import 'package:bmi_calculator/calculator_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'icon_content.dart';
-import 'reusable_card.dart';
-import 'constants.dart';
+import '../components/bottom_button.dart';
+import '../components/icon_content.dart';
+import '../components/reusable_card.dart';
+import '../constants.dart';
+import 'result_page.dart';
+import '../components/round_icon_button.dart';
 
 enum Gender { male, female }
 
@@ -23,7 +26,7 @@ class _InputPageState extends State<InputPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('BMI CALCULATOR')),
+      appBar: AppBar(title: kTitle),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -78,7 +81,7 @@ class _InputPageState extends State<InputPage> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text(height.toString(), style: kHeavyText),
+                      Text(height.toString(), style: kHeavyTextStyle),
                       Text('cm', style: kLabelTextStyle),
                     ],
                   ),
@@ -121,7 +124,7 @@ class _InputPageState extends State<InputPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('WEIGHT', style: kLabelTextStyle),
-                        Text(weight.toString(), style: kHeavyText),
+                        Text(weight.toString(), style: kHeavyTextStyle),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -155,7 +158,7 @@ class _InputPageState extends State<InputPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('AGE', style: kLabelTextStyle),
-                        Text(age.toString(), style: kHeavyText),
+                        Text(age.toString(), style: kHeavyTextStyle),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -187,37 +190,28 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           // FloatingActionButton(onPressed: onPressed, child: child)
-          Container(
-            color: kBottomContainerColor,
-            margin: EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: kBottomContainerHeight,
+          BottomButton(
+            buttonTitle: 'CALCULATE',
+            onTap: () {
+              CalculatorBrain calc = CalculatorBrain(
+                height: height,
+                weight: weight,
+              );
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultPage(
+                    bmiResult: calc.calculateBMI(),
+                    bmiResultText: calc.getResult(),
+                    bmiResultInterpretation: calc.getInterpretation(),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
-    );
-  }
-}
-
-class RoundIconButton extends StatelessWidget {
-  const RoundIconButton({
-    required this.icon,
-    required this.onPressed,
-    super.key,
-  });
-
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      elevation: 0.0,
-      constraints: BoxConstraints.tightFor(width: 56.0, height: 56.0),
-      shape: CircleBorder(),
-      fillColor: Color(0xFF4C4F5E),
-      onPressed: onPressed,
-      child: Icon(icon),
     );
   }
 }
